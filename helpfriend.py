@@ -18,7 +18,9 @@ def InGuardLines(x,y):
     return False
     
 def HelpFriend():
-    mob_para = Target.GetTargetFromList("para_friends")
+    if Target.HasTarget('Harmful'):
+        Target.Cancel()
+    mob_para = Target.GetTargetFromList("friends")
     Misc.Pause(30)
     if mob_para is not None:
         if mob_para.Paralized and Timer.Check("feeble") == False:
@@ -33,14 +35,7 @@ def HelpFriend():
     if mob is not None:
         guardszone = InGuardLines(mob.Position.X,mob.Position.Y)
         if not mob.YellowHits:
-            if mob.Paralized and Timer.Check("feeble") == False:
-                Spells.CastMagery("Feeblemind")
-                Target.WaitForTarget(500,True)
-                Target.TargetExecute(mob.Serial)
-                Misc.Pause(30)
-                Timer.Create("feeble", 200)
-                return
-            elif mob.Poisoned and not guardszone:
+            if mob.Poisoned and not guardszone:
                 Spells.CastMagery("Cure")
                 Target.WaitForTarget(1000,True)
                 Target.TargetExecute(mob.Serial)
@@ -48,7 +43,7 @@ def HelpFriend():
                 return
             elif mob.Hits < mob.HitsMax and not guardszone: 
                 Spells.CastMagery("Heal")
-                Target.WaitForTarget(500,True)
+                Target.WaitForTarget(800,True)
                 Target.TargetExecute(mob.Serial)
                 Misc.Pause(30)
                 return
@@ -66,4 +61,4 @@ def HelpFriend():
     return 
 
 HelpFriend()
-Misc.Pause(10)
+Misc.Pause(10) 

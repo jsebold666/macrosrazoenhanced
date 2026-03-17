@@ -1,3 +1,7 @@
+potID = 0x1F39
+Journal.Clear()
+pots = Items.FindByID(potID,-1,Player.Backpack.Serial)
+
 def MultiTrapPouch():
     pouches = []
     try:
@@ -21,7 +25,8 @@ def MultiTrapPouch():
             if "True" not in str(pouch):
                 Target.ClearQueue()
                 last = Target.GetLast()
-                Spells.CastMagery("Magic Trap")
+                stack = pots.Serial
+                Items.UseItem(stack)
                 Target.WaitForTarget(2000, True)
                 Target.TargetExecute(int(pouch.split(',')[0]))
                 Target.SetLast(last)

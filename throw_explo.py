@@ -48,6 +48,7 @@ def ThrowExploPotAway():
                 'Right' : Coord(Tiles, -Tiles)
             }
             Rel = Dir[Player.Direction]
+            Player.HeadMessage(13,"Range 4 - UM")
             lasttarget = Target.GetLast()
             Target.TargetExecute(Rel.X, Rel.Y, Rel.Z)
             Misc.Pause(200)
@@ -86,6 +87,7 @@ def ThrowExploPotAway():
         Misc.Pause(250)
     else:    
         potID = 0x0F0D
+        Player.HeadMessage(13,"Range 3 - UM")
         pots = Items.FindByID(potID,-1,Player.Backpack.Serial)
         if Items.BackpackCount(potID, -1) == 0:
             Player.HeadMessage(30, 'Out of Exp pots')
@@ -94,13 +96,19 @@ def ThrowExploPotAway():
             Items.UseItem(stack)
             Target.WaitForTarget(200,True)
             if enemy != None:
-                if Player.DistanceTo( enemy ) <= 10:
+                if Player.DistanceTo( enemy ) <= 11:
+                    Player.HeadMessage(13,"Range 32 - UM")
                     Target.TargetExecute(enemy)
-                    Misc.Pause(200)
+                    #Target.ClearLastAttack( )
+                    #Target.ClearLastandQueue( )
+                    Misc.Pause(10)
                     return
             elif Target.GetLast() != None:
-                Target.Last()
-                Misc.Pause(200)
+                Player.HeadMessage(13,"Range 31 - UM")
+                Target.LastQueued()
+                ##Target.ClearLastAttack( )
+                ##Target.ClearLastandQueue( )
+                Misc.Pause(10)
                 return
     return    
 

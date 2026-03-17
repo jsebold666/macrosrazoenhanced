@@ -6,6 +6,10 @@ pots = Items.FindByID(potID,-1,Player.Backpack.Serial)
 def PainThrow():
     if Items.BackpackCount(potID, -1) == 0:
         Player.HeadMessage(30, 'Out of scroll pain')
+        Spells.CastNecro("Pain Spike")
+        Target.WaitForTarget(3000)
+        Target.LastQueued()
+        Misc.Pause(600)
     else:
         stack = pots.Serial
         Items.UseItem(stack)

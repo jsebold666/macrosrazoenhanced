@@ -1,4 +1,4 @@
-def MultiTrapPouch():
+def MultiTrapPouchUse():
     pouches = []
     try:
         with open(str(Misc.CurrentScriptDirectory())+'\\'+Player.Name+"-pouches.txt", 'r') as pouches_file:
@@ -9,31 +9,29 @@ def MultiTrapPouch():
                         pouches.append(line.rstrip())
     except EnvironmentError:
         pouches_file = open(str(Misc.CurrentScriptDirectory())+'\\'+Player.Name+"-pouches.txt", 'w')
-        
+    
     with open(str(Misc.CurrentScriptDirectory())+'\\'+Player.Name+"-pouches.txt", 'w') as pouches_file:
         for item in Player.Backpack.Contains:
             if "pouch" in str(item) and str(item.Serial) not in str(pouches):
                 pouches.append(str(item.Serial) + ", False")
-
+        used = False
         i = -1
         for pouch in pouches:
             i += 1
-            if "True" not in str(pouch):
-                Target.ClearQueue()
-                last = Target.GetLast()
-                Spells.CastMagery("Magic Trap")
-                Target.WaitForTarget(2000, True)
-                Target.TargetExecute(int(pouch.split(',')[0]))
-                Target.SetLast(last)
-                Misc.Pause(30)
-                pouches[i] = str(pouch.split(',')[0]) + ", True" 
+            if "True" in str(pouch):
+                #Player.HeadMessage( 13, "USING POUCH")
+                Items.UseItem(int(pouch.split(',')[0]))
+                Misc.Pause(100)
+                pouches[i] = str(pouch.split(',')[0]) + ", False" 
+                used = True
                 break
         for pouch in pouches:
             pouches_file.write(str(pouch))
             pouches_file.write("\n")
-        return    
-           
-    
+        if not used and Timer.Check("pouches") == False:
+            Misc.SendMessage("[DANGER] POUCH NOT TRAPPED")
+            Timer.Create("pouches",3000)
+    return    
 
-MultiTrapPouch()
+MultiTrapPouchUse()
 Misc.Pause(10)
